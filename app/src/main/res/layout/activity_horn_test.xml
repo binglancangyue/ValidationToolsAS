@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutStyle"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/LayoutTitleStyle"
+        android:text="@string/tv_horn_test_title" />
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/icon_horn" />
+
+    <TextView
+        android:id="@+id/tv_voice_time"
+        style="@style/itemTextTitleStyle"
+        android:layout_marginTop="20dp"
+        android:text="00:00" />
+
+    <Button
+        android:id="@+id/btn_play_voice"
+        style="@style/ButtonStyle"
+        android:layout_marginTop="20dp"
+        android:text="@string/play_recording_voice" />
+</LinearLayout>

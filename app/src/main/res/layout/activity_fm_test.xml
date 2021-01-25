@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutStyle">
+
+    <TextView
+        style="@style/LayoutTitleStyle"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/fm_emission_test" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/itemTextTitleStyle"
+            android:layout_marginTop="20dp"
+            android:text="@string/fixed_transmitting_frequency" />
+
+        <TextView
+            style="@style/itemTextTitleStyle"
+            android:layout_marginTop="10dp"
+            android:text="@string/play_microphone_recording" />
+
+        <Button
+            android:id="@+id/btn_fm_play"
+            style="@style/ButtonStyle"
+            android:layout_marginTop="30dp"
+            android:text="@string/fm_btn_play" />
+    </LinearLayout>
+
+</RelativeLayout>

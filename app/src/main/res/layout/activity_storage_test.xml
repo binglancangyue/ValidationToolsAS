@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutStyle">
+
+    <TextView
+        style="@style/LayoutTitleStyle"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/save_test_results_title" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/itemTextTitleStyle"
+            android:text="@string/title_emc" />
+
+        <TextView
+            android:id="@+id/tv_title_emc"
+            style="@style/itemTextTitleStyle" />
+
+        <TextView
+            style="@style/itemTextTitleStyle"
+            android:layout_marginTop="15dp"
+            android:text="@string/title_ddr" />
+
+        <TextView
+            android:id="@+id/tv_title_ddr"
+            style="@style/itemTextTitleStyle" />
+    </LinearLayout>
+
+
+</RelativeLayout>

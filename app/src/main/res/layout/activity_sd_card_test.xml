@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutStyle">
+
+    <TextView
+        style="@style/LayoutTitleStyle"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/sdcard_test" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_sd_card"
+            style="@style/itemTextTitleStyle" />
+
+        <TextView
+            android:id="@+id/tv_neicun"
+            style="@style/itemTextTitleStyle"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutStyle"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/LayoutTitleStyle"
+        android:text="@string/recording_test_title" />
+
+    <TextView
+        android:id="@+id/tv_record_time"
+        style="@style/itemTextTitleStyle"
+        android:layout_marginTop="20dp"
+        android:text="00:00" />
+
+    <Button
+        android:id="@+id/btn_record"
+        style="@style/ButtonStyle"
+        android:layout_marginTop="20dp"
+        android:text="@string/btn_start_record" />
+</LinearLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutStyle"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/LayoutTitleStyle"
+        android:text="@string/acc_title_test" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/tv_record_time"
+        style="@style/itemTextTitleStyle"
+        android:text="@string/please_open_or_close_acc" />
+
+</LinearLayout>
