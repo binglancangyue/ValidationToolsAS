@@ -43,7 +43,7 @@
     </RelativeLayout>
     <TextView
         android:layout_marginTop="40dp"
-        android:textSize="26sp"
+        android:textSize="24sp"
         android:id="@+id/light_msg"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

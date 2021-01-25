@@ -23,7 +23,7 @@
 
         <TextView
             style="@style/itemTextTitleStyle"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="@string/hardware_product_information" />
 
         <TextView

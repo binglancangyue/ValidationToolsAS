@@ -19,5 +19,6 @@
     <dimen name="rf_cali_scroll_height">330dip</dimen>
     <dimen name="lookback_bottom_size">200dip</dimen>
 
-    <dimen name="listViewItemTextViewSize">25sp</dimen>
+    <dimen name="listViewItemTextViewSize">24sp</dimen>
+    <dimen name="listViewTimeHeight">60dp</dimen>
 </resources>

@@ -11,12 +11,12 @@
     <TextView
         android:id="@+id/tv_record_time"
         style="@style/itemTextTitleStyle"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="00:00" />
 
     <Button
         android:id="@+id/btn_record"
         style="@style/ButtonStyle"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="@string/btn_start_record" />
 </LinearLayout>

@@ -29,13 +29,13 @@
         <item name="android:gravity">center</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">25sp</item>
+        <item name="android:textSize">24sp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="LayoutStyle">
-        <item name="android:paddingVertical">35dp</item>
-        <item name="android:paddingHorizontal">40dp</item>
+        <item name="android:paddingVertical">25dp</item>
+        <item name="android:paddingHorizontal">20dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
     </style>
@@ -48,17 +48,17 @@
     </style>
 
     <style name="ButtonStyle">
-        <item name="android:padding">20dp</item>
+        <item name="android:padding">12dp</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">26sp</item>
+        <item name="android:textSize">24sp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
     </style>
 
     <style name="LayoutTitleStyle">
-        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:layout_marginBottom">15dp</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">32sp</item>
+        <item name="android:textSize">26sp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
     </style>

@@ -172,7 +172,7 @@ public class BaseActivity extends Activity implements OnClickListener{
         addView = LayoutInflater.from(this).inflate(R.layout.float_btn, null);
         lp.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | LayoutParams.FLAG_NOT_FOCUSABLE;
-        lp.height = 110;
+        lp.height = 80;
         lp.gravity = Gravity.BOTTOM;
         mPassButton = addView.findViewById(R.id.btn_ok);
         mFailButton = addView.findViewById(R.id.btn_fail);
