@@ -109,7 +109,7 @@ public static final int[] ALL_TEST_ITEM_STRID = {
         R.string.gravity_sensor_test, R.string.front_camera_title_text,
         R.string.back_camera_title_text, R.string.fm_test,
         R.string.bt_test, R.string.wifi_test,
-        R.string.gps_test, R.string.signal_test_title,
+        /*R.string.gps_test,*/ R.string.signal_test_title,
         R.string.sdcard_test, R.string.sim_test,
         R.string.battery_title_text,/* R.string.reversing_detection_title_test,*/
         R.string.acc_title_test, R.string.save_test_results_title,
@@ -143,7 +143,7 @@ public static final String[] ALL_TEST_ITEM_NAME = {
         "Gsensor test", "FrontCamera test",
         "BackCamera test", "FM test",
         "Bluetooth test", "Wifi test",
-        "Gps test", "4g signal test",
+        /*"Gps test",*/ "4g signal test",
         "SDcard test", "SIMcard test",
         "Charger test",/* "Reversing detection test",*/
         "ACC detection test", "Storage result",
@@ -183,7 +183,7 @@ public static final Class[] ALL_TEST_ITEM = {
         GsensorTestActivity.class, FrontCameraTestActivity.class,
         CameraTestActivity.class, FMTestActivity.class,
         BluetoothTestActivity.class, WifiTestActivity.class,
-        GpsTestActivity.class, SignalTestActivity.class,
+        /*GpsTestActivity.class,*/ SignalTestActivity.class,
         SDCardTest.class, SIMCardTestActivity.class,
         ChargerTest.class, /*ReversingDetectionTestActivity.class,*/
         ACCTestActivity.class, StorageTestActivity.class,
@@ -223,7 +223,7 @@ public static final Class[] DEFAULT_UNIT_TEST_ITEMS = {
         GsensorTestActivity.class, FrontCameraTestActivity.class,
         CameraTestActivity.class, FMTestActivity.class,
         BluetoothTestActivity.class, WifiTestActivity.class,
-        GpsTestActivity.class, SignalTestActivity.class,
+        /*GpsTestActivity.class,*/ SignalTestActivity.class,
         SDCardTest.class, SIMCardTestActivity.class,
         ChargerTest.class, /*ReversingDetectionTestActivity.class,*/
         ACCTestActivity.class, StorageTestActivity.class,

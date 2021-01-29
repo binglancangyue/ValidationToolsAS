@@ -129,7 +129,7 @@ public class GpsTestActivity extends BaseActivity {
         txtGpsMsg = (TextView) findViewById(R.id.txt_gps_not_enabled);
         mSatelliteInfo = (TextView) findViewById(R.id.txt_gps_satellite_info);
         mSatelliteInfo.setText("\n\n");
-        mHandler.postDelayed(mR, 60000);
+        mHandler.postDelayed(mR, 40000);
     }
 
     @Override

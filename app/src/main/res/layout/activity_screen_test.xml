@@ -5,17 +5,17 @@
     android:orientation="vertical">
 
     <TextView
-        android:textSize="24sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:text="@string/touch_screen_blue" />
+        android:text="@string/touch_screen_blue"
+        android:textSize="24sp" />
 
     <com.sprd.validationtools.utils.TouchTestGridView
         android:id="@+id/gv_touch"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#e6e6e6"
-        android:columnCount="5"
+        android:columnCount="4"
         android:rowCount="4" />
 </LinearLayout>

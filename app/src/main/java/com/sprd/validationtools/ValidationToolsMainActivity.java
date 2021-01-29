@@ -244,11 +244,11 @@ public class ValidationToolsMainActivity extends Activity implements
 
     private void startBackgroundTest() {
         mBgTest = new ArrayList<BackgroundTest>();
-        mBgTest.add(new BackgroundBtTest(this));
-        mBgTest.add(new BackgroundWifiTest(this));
+//        mBgTest.add(new BackgroundBtTest(this));
+//        mBgTest.add(new BackgroundWifiTest(this));
         mBgTest.add(new BackgroundGpsTest(this));
-        mBgTest.add(new BackgroundSimTest(this));
-        mBgTest.add(new BackgroundSdTest());
+//        mBgTest.add(new BackgroundSimTest(this));
+//        mBgTest.add(new BackgroundSdTest());
         for (BackgroundTest bgTest : mBgTest) {
             bgTest.startTest();
         }
@@ -492,11 +492,12 @@ class BackgroundGpsTest implements BackgroundTest {
                         count++;
                         GpsSatellite gpsSatellite = iterator.next();
                         float snr = gpsSatellite.getSnr();
-                        Log.d(TAG, "snr = "+snr);
-                        if (snr > 35.0)
+                        Log.d(TAG, "snr = " + snr);
+                        if (snr >= 30.0) {
                             flag = true;
+                        }
                     }
-                    if (count >= SATELLITE_COUNT_MIN && flag){
+                    if (count >= SATELLITE_COUNT_MIN && flag) {
                         testResult = RESULT_PASS;
                     }
                 }
