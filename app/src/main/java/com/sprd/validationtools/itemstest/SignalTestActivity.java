@@ -18,6 +18,7 @@ import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sprd.validationtools.BaseActivity;
 import com.sprd.validationtools.R;
@@ -36,6 +37,7 @@ public class SignalTestActivity extends BaseActivity {
     private TextView tvType;
     private MyHandle myHandle;
     private String signalLevelString = "";
+    private ConnectivityManager connectivityManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +47,11 @@ public class SignalTestActivity extends BaseActivity {
         mBroadcastReceiver = new StatusChangeBroadcastReceiver();
         telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         myHandle = new MyHandle(this);
-//        addPhoneStateListener();
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         getPhoneState(this);
         initBroadcastReceiver();
         getOperator();
+        myHandle.sendEmptyMessageDelayed(2, 5000);
     }
 
     private void initView() {
@@ -143,7 +146,7 @@ public class SignalTestActivity extends BaseActivity {
                         } else {
                             signalLevelString = "网络错误";
                         }
-                        Log.i("NetWorkUtil", "网络：LTE 信号强度：" + ltedbm + "======Detail:" + signalinfo);
+                        Log.i("NetWorkUtil", "网络：4G 信号强度：" + ltedbm + "==Detail:" + signalinfo);
                         break;
                     case TelephonyManager.NETWORK_TYPE_UMTS:
                     case TelephonyManager.NETWORK_TYPE_EVDO_0:
@@ -168,7 +171,7 @@ public class SignalTestActivity extends BaseActivity {
                             bin = "网络错误";
                         }
                         signalLevelString = bin;
-                        Log.i("NetWorkUtil", "网络：WCDMA 信号值：" + dbm + "========强度：" + bin + "======Detail:" + signalinfo);
+                        Log.i("NetWorkUtil", "网络：3G 信号值：" + dbm + "==强度：" + bin + "==Detail:" + signalinfo);
                         break;
                     case TelephonyManager.NETWORK_TYPE_GPRS:
                     case TelephonyManager.NETWORK_TYPE_EDGE:
@@ -189,8 +192,34 @@ public class SignalTestActivity extends BaseActivity {
                             bin1 = "网络很差";
                         }
                         signalLevelString = bin1;
-                        Log.i("NetWorkUtil", "网络：GSM 信号值：" + dbm + "========强度：" + bin1 + "======Detail:" + signalinfo);
+                        Log.i("NetWorkUtil", "网络：2G：" + dbm + "==强度：" + bin1 + "==Detail:" + signalinfo);
                         break;
+//                    default:
+//                        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+//                        String strSubTypeName = info.getSubtypeName();
+//                        if (strSubTypeName.equalsIgnoreCase("TD-SCDMA")
+//                                || strSubTypeName.equalsIgnoreCase("WCDMA")
+//                                || strSubTypeName.equalsIgnoreCase("CDMA2000")) {
+//                            netWorkType = "3G";
+//                            String bin3G;
+//                            if (dbm > -75) {
+//                                bin3G = "网络很好";
+//                            } else if (dbm > -85) {
+//                                bin3G = "网络不错";
+//                            } else if (dbm > -95) {
+//                                bin3G = "网络还行";
+//                            } else if (dbm > -100) {
+//                                bin3G = "网络很差";
+//                            } else {
+//                                bin3G = "网络错误";
+//                            }
+//                            signalLevelString = bin3G;
+//                            Log.i("NetWorkUtil", " 网络：default 信号值：" + dbm + "==强度：" + bin3G + "==Detail:" + signalinfo);
+//                        } else {
+//                            netWorkType = "Unknown";
+//                            signalLevelString = "";
+//                        }
+//                        break;
                 }
                 super.onSignalStrengthsChanged(signalStrength);
                 myHandle.sendEmptyMessage(1);
@@ -268,7 +297,23 @@ public class SignalTestActivity extends BaseActivity {
             if (msg.what == 1) {
                 mActivity.updateInfo();
             }
+            if (msg.what == 2) {
+                mActivity.setResult();
+            }
         }
+    }
+
+    private void setResult() {
+        if (yunYingShan.equals("")) {
+            Toast.makeText(SignalTestActivity.this, R.string.text_fail,
+                    Toast.LENGTH_SHORT).show();
+            storeRusult(false);
+        } else {
+            Toast.makeText(SignalTestActivity.this, R.string.text_pass,
+                    Toast.LENGTH_SHORT).show();
+            storeRusult(true);
+        }
+        finish();
     }
 
     @Override

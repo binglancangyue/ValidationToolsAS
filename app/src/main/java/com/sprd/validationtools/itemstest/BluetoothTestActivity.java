@@ -7,6 +7,8 @@ import java.util.List;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -27,6 +29,7 @@ public class BluetoothTestActivity extends BaseActivity {
     private TextView tvBtDeviceList = null;
 
     private BtTestUtil btTestUtil = null;
+    private StringBuffer deviceInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,30 +67,34 @@ public class BluetoothTestActivity extends BaseActivity {
             }
 
             public void btDeviceListAdd(BluetoothDevice device) {
-
                 if (mBluetoothDeviceList.contains(device)) {
                     return;
                 }
-
                 if (device != null) {
                     mBluetoothDeviceList.add(device);
                     if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
                         String name = device.getName();
                         if (name == null || name.isEmpty()) {
-                            return;
+                            name = "No name";
                         }
-                        StringBuffer deviceInfo = new StringBuffer();
+                        deviceInfo = new StringBuffer();
                         deviceInfo.append("device name: ");
                         deviceInfo.append(name);
                         deviceInfo.append("\n");
                         Log.w(TAG, "======find bluetooth device => name : " + name
                                 + "\n address :" + device.getAddress());
-                        tvBtDeviceList.append(deviceInfo.toString());
+                        myHandle.sendEmptyMessage(1);
                     }
+                } else {
+                    Log.d(TAG, "btDeviceListAdd: device==null");
                 }
             }
 
             public void btDiscoveryFinished() {
+                btTestUtil.stopTest();
+                for (BluetoothDevice s : mBluetoothDeviceList) {
+                    Log.d(TAG, "btDiscoveryFinished: " + s.getName());
+                }
                 if (mBluetoothDeviceList != null
                         && mBluetoothDeviceList.size() > 0) {
                     Toast.makeText(BluetoothTestActivity.this, R.string.text_pass,
@@ -100,26 +107,35 @@ public class BluetoothTestActivity extends BaseActivity {
                     storeRusult(false);
 
                 }
-                btTestUtil.stopTest();
                 finish();
             }
-        };
+        }
 
-        tvBtAddr = (TextView) findViewById(R.id.bt_addr_content);
-        tvBtState = (TextView) findViewById(R.id.bt_state_content);
-        tvBtDeviceList = (TextView) findViewById(R.id.tv_bt_device_list);
+        ;
+
+        tvBtAddr = (TextView)
+
+                findViewById(R.id.bt_addr_content);
+
+        tvBtState = (TextView)
+
+                findViewById(R.id.bt_state_content);
+
+        tvBtDeviceList = (TextView)
+
+                findViewById(R.id.tv_bt_device_list);
 
         /*SPRD bug 817253:Maybe cause NullPointerException.*/
-        if(btTestUtil.getBluetoothAdapter() != null){
+        if (btTestUtil.getBluetoothAdapter() != null) {
             tvBtAddr.setText(btTestUtil.getBluetoothAdapter().getAddress());
-        }else{
+        } else {
             tvBtAddr.setText("NA");
             Log.w(TAG, "onCreate mBluetoothAdapter == null");
         }
         //tvBtAddr.setText(btTestUtil.getBluetoothAdapter().getAddress() + "\n");
     }
 
-    public void onClick(View v){
+    public void onClick(View v) {
         btTestUtil.stopTest();
         super.onClick(v);
     }
@@ -138,10 +154,18 @@ public class BluetoothTestActivity extends BaseActivity {
     }
     /* @}*/
 
-    public void onBackPressed(){
+    public void onBackPressed() {
         btTestUtil.stopTest();
         super.onBackPressed();
     }
+
+    private Handler myHandle = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            tvBtDeviceList.append(deviceInfo.toString());
+        }
+    };
 }
 
 

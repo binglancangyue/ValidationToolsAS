@@ -30,67 +30,107 @@ import android.util.Log;
 
 public class GpsTestActivity extends BaseActivity {
     private static final String TAG = "GpsTestActivity";
-    /** GPS satellite count info name */
+    /**
+     * GPS satellite count info name
+     */
     public static final String GPS_SATELLITE_COUNT_NAME = "gpsSatelliteCount";
 
-    /** GPS test flag info name */
+    /**
+     * GPS test flag info name
+     */
     public static final String GPS_TEST_FLAG_NAME = "gpsTestFlag";
 
-    /** the GPS settings package name */
+    /**
+     * the GPS settings package name
+     */
     private static final String GPSSET_PACKAGE_NAME = "com.android.settings";
 
-    /** the GPS settings class name */
+    /**
+     * the GPS settings class name
+     */
     private static final String GPSSET_CLASS_NAME = "com.android.settings.Settings$LocationSettingsActivity";
 
-    /** GPS provider name */
+    /**
+     * GPS provider name
+     */
     private static final String PROVIDER = LocationManager.GPS_PROVIDER;
 
-    /** location update min time */
+    /**
+     * location update min time
+     */
     private static final long UPDATE_MIN_TIME = 1000;
 
-    /** satellite min count for OK */
+    /**
+     * satellite min count for OK
+     */
     private static final int SATELLITE_COUNT_MIN = 4;
 
     /** time count max : 5 minutes */
     // private static final int TIME_COUNT_MAX = 300;
-    /** time count length : 1 second */
+    /**
+     * time count length : 1 second
+     */
     private static final int TIME_LENGTH = 1000;
 
-    /** location manager object */
+    /**
+     * location manager object
+     */
     private LocationManager manager = null;
 
-    /** location listener object */
+    /**
+     * location listener object
+     */
     private LocationListener locationListener = null;
 
-    /** gps status listener object */
+    /**
+     * gps status listener object
+     */
     private GpsStatus.Listener gpsStatusListener = null;
 
-    /** the text view object for show gps not enabled message */
+    /**
+     * the text view object for show gps not enabled message
+     */
     private TextView txtGpsMsg = null;
 
-    /** the button that show gps settings activity */
+    /**
+     * the button that show gps settings activity
+     */
     private Button btnShow = null;
 
-    /** timer object */
+    /**
+     * timer object
+     */
     private Timer timer = null;
 
-    /** not time left count */
+    /**
+     * not time left count
+     */
     private int timeCount = 0;
 
-    /** max satellite count that have been searched */
+    /**
+     * max satellite count that have been searched
+     */
     private int mSatelliteCount;
 
-    /** extra gps test result **/
+    /**
+     * extra gps test result
+     **/
     public static final String EXTRA_SET_FACTORY_SET_GPS_RESULT = "EXTRA_SET_FACTORY_SET_GPS_RESULT";
 
-    /** extra auto test result **/
+    /**
+     * extra auto test result
+     **/
 
     public static final String INTENT_EXTRA_KEY_GPS_SEARCH_STAR_COUNT = "intentExtraGpsSearchStarCount";
 
-    /** the success result of the gps test */
+    /**
+     * the success result of the gps test
+     */
     private static final byte RESULT_SUCCESS = 1;
 
-    /** the f result of the gps test */
+    /**
+     * the f result of the gps test
+     */
     private static final byte RESULT_FAILURE = 0;
 
     private TextView mSatelliteInfo;
@@ -112,7 +152,7 @@ public class GpsTestActivity extends BaseActivity {
     };
 
     @Override
-    public void onClick(View v){
+    public void onClick(View v) {
         mHandler.removeCallbacks(mR);
         super.onClick(v);
     }
@@ -162,12 +202,12 @@ public class GpsTestActivity extends BaseActivity {
             }
 
             public void onStatusChanged(String provider, int status,
-                    Bundle extras) {
+                                        Bundle extras) {
             }
         };
         gpsStatusListener = new GpsStatus.Listener() {
             public void onGpsStatusChanged(int event) {
-                Log.d(TAG, " " + event);
+                Log.d(TAG, "event: " + event);
                 if (event == GpsStatus.GPS_EVENT_SATELLITE_STATUS) {
                     showSatelliteCount();
                 }
@@ -175,8 +215,10 @@ public class GpsTestActivity extends BaseActivity {
         };
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         setTitle(R.string.gps_title_text);
-         Settings.Secure.setLocationProviderEnabled(getContentResolver(),
-        LocationManager.GPS_PROVIDER, true);
+//        Settings.Secure.setLocationProviderEnabled(getContentResolver(),
+//                LocationManager.GPS_PROVIDER, true);
+        Settings.Secure.putInt(getContentResolver(),
+                Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_HIGH_ACCURACY);
         try {
             manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     UPDATE_MIN_TIME, 0, locationListener);
@@ -190,8 +232,8 @@ public class GpsTestActivity extends BaseActivity {
 
     @Override
     public void onStop() {
-        Settings.Secure.setLocationProviderEnabled(getContentResolver(),
-        LocationManager.GPS_PROVIDER, false);
+//        Settings.Secure.setLocationProviderEnabled(getContentResolver(),
+//                LocationManager.GPS_PROVIDER, false);
         if (gpsStatusListener != null) {
             manager.removeGpsStatusListener(gpsStatusListener);
         }
@@ -216,7 +258,9 @@ public class GpsTestActivity extends BaseActivity {
     }
 
     private void showGpsMsg() {
-        if (!isGpsEnabled()) {
+        boolean isGpsEnabled = isGpsEnabled();
+        Log.d(TAG, "showGpsMsg: isGpsEnabled " + isGpsEnabled);
+        if (!isGpsEnabled) {
             // gps not enabled
             txtGpsMsg.setText(getString(R.string.gps_not_enabled_msg));
             // btnShow.setEnabled(true);
@@ -228,7 +272,7 @@ public class GpsTestActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        return ;
+        return;
     }
 
     private void showSatelliteCount() {
@@ -246,9 +290,10 @@ public class GpsTestActivity extends BaseActivity {
                 count++;
                 GpsSatellite gpsSatellite = iterator.next();
                 float snr = gpsSatellite.getSnr();
-                Log.d(TAG, "snr = "+snr);
-                if (snr > 35.0)
+                Log.d(TAG, "snr = " + snr);
+                if (snr >= 5.0) {
                     flag = true;
+                }
                 mSatelliteInfo.append("id: ");
                 mSatelliteInfo.append(String.valueOf(gpsSatellite.getPrn()));
                 mSatelliteInfo.append("\nsnr: ");
@@ -304,7 +349,7 @@ public class GpsTestActivity extends BaseActivity {
 
     private void startTimer() {
         timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerCountTask(), 0, TIME_LENGTH);
+        timer.schedule(new TimerCountTask(), 100, TIME_LENGTH);
     }
 
     private void cancelTimer() {

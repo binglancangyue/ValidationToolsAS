@@ -64,6 +64,7 @@ public class Const {
     public static final int RESULT_TYPE_NORMAL = 1;
 
     public final static int TEST_ITEM_DONE = 0;
+    public final static int TEST_ITEM_DONE_RE = 1;
     public static final boolean IS_SUPPORT_LED_TEST = fileIsExists(LED_PATH);
     public static final boolean IS_SUPPORT_CALIBTATION_TEST = fileIsExists(CALIBRATOR_CMD);
     /*SRPD bug 776983:Add OTG*/
@@ -74,6 +75,8 @@ public class Const {
     /* SPRD Bug 746453:Some product don't support blue indicator light. @{ */
     public static final boolean DISABLE_BLUE_LED = isBoardISharkL210c10();
     /*@}*/
+
+    public static final boolean IS_KD003 = true;
 
 /*    public static final int[] ALL_TEST_ITEM_STRID = {
             R.string.version_test, R.string.rf_cali_test, R.string.rtc_test,
@@ -149,6 +152,20 @@ public static final String[] ALL_TEST_ITEM_NAME = {
         "ACC detection test", "Storage result",
         RESULT_TEST_NAME
 };
+    public static final String[] AUTO_TEST_ITEM_NAME = {
+            "Version", "Screen test",
+            /*"TP test",*/ "Multi-TP test",
+            "Recording test", "Horn test",
+            "Gsensor test", "FrontCamera test",
+            "BackCamera test", "FM test",
+            "Bluetooth test", "Wifi test",
+            /*"Gps test",*/ "4g signal test",
+            "SDcard test", "SIMcard test",
+            "Charger test",/* "Reversing detection test",*/
+            "ACC detection test", "Storage result",
+            RESULT_TEST_NAME
+    };
+
 /*    public static final Class[] ALL_TEST_ITEM = {
             SystemVersionTest.class, RFCALITest.class, RTCTest.class,
             BackLightTest.class, ScreenColorTest.class,
@@ -189,6 +206,19 @@ public static final Class[] ALL_TEST_ITEM = {
         ACCTestActivity.class, StorageTestActivity.class,
         TestResultActivity.class
 };
+    public static final Class[] AUTO_TEST_ITEM = {
+            SystemVersionTest.class, ScreenColorTest.class,
+            /*SingleTouchPointTest.class,*/ ScreenTouchTestActivity.class,
+            RecordingTestActivity.class, HornTestActivity.class,
+            GsensorTestActivity.class, FrontCameraTestActivity.class,
+            CameraTestActivity.class, FMTestActivity.class,
+            BluetoothTestActivity.class, WifiTestActivity.class,
+            /*GpsTestActivity.class,*/ SignalTestActivity.class,
+            SDCardTest.class, SIMCardTestActivity.class,
+            ChargerTest.class, /*ReversingDetectionTestActivity.class,*/
+            ACCTestActivity.class, StorageTestActivity.class,
+            TestResultActivity.class
+    };
 
 /*    public static final Class[] DEFAULT_UNIT_TEST_ITEMS = {
             SystemVersionTest.class, RFCALITest.class, RTCTest.class,
@@ -259,12 +289,12 @@ public static final Class[] DEFAULT_UNIT_TEST_ITEMS = {
     };*/
     public static final Class[] DEFAULT_AUTO_TEST_ITEMS = {
             SystemVersionTest.class, ScreenColorTest.class,
-            SingleTouchPointTest.class, ScreenTouchTestActivity.class,
-            PhoneLoopBackTest.class, HornTestActivity.class,
+            /*SingleTouchPointTest.class,*/ ScreenTouchTestActivity.class,
+            RecordingTestActivity.class, HornTestActivity.class,
             GsensorTestActivity.class, FrontCameraTestActivity.class,
             CameraTestActivity.class, FMTestActivity.class,
             BluetoothTestActivity.class, WifiTestActivity.class,
-            GpsTestActivity.class, SignalTestActivity.class,
+            /*GpsTestActivity.class,*/ SignalTestActivity.class,
             SDCardTest.class, SIMCardTestActivity.class,
             ChargerTest.class, /*ReversingDetectionTestActivity.class,*/
             ACCTestActivity.class, StorageTestActivity.class,
@@ -675,8 +705,9 @@ public static final Class[] DEFAULT_UNIT_TEST_ITEMS = {
                 }
             }
         }*/
-        for (int j = 0; j < ALL_TEST_ITEM.length; j++) {
+        for (int j = 0; j < DEFAULT_AUTO_TEST_ITEMS.length; j++) {
             TestItem item = new TestItem(j);
+            Log.d(TAG, "getSupportAutoTestList: " + item.getAutoTestTestName());
             supportArray.add(item);
         }
         return supportArray;

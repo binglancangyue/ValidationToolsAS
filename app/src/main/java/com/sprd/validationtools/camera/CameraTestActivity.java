@@ -412,7 +412,13 @@ public class CameraTestActivity extends BaseActivity implements TextureView.Surf
             Size optimalSize = getOptimalPreviewSize(this, sizes, (double) size.width / size.height);
             Size original = parameters.getPreviewSize();
             if (!original.equals(optimalSize)) {
-                parameters.setPreviewSize(optimalSize.width, optimalSize.height);
+                if (Const.IS_KD003) {
+                    parameters.setPreviewSize(1920, 1080);
+                    Log.v(TAG, "Preview size is IS_KD003 : " + 1920 + "x" + 1080);
+                } else {
+                    parameters.setPreviewSize(optimalSize.width, optimalSize.height);
+                    Log.v(TAG, "Preview size is !IS_KD003" + optimalSize.width + "x" + optimalSize.height);
+                }
             }
             Log.v(TAG, "Preview size is " + optimalSize.width + "x" + optimalSize.height);
             mPreviewWidth = optimalSize.width;

@@ -1,5 +1,6 @@
 package com.sprd.validationtools.itemstest;
 
+import android.content.Context;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,12 +26,14 @@ public class RecordingTestActivity extends BaseActivity {
     private Button btnRecord;
     private Timer mRecordingTimer;
     private int time = 0;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.removeButton();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recording_voice);
+        mContext = this;
         initView();
     }
 
@@ -43,12 +46,10 @@ public class RecordingTestActivity extends BaseActivity {
                 btnRecord.setEnabled(false);
                 time++;
                 if (time == 6) {
+                    time = 0;
                     btnRecord.setEnabled(true);
                     stopRecord();
-                    time = 0;
-                    mRecordingTimer.purge();
-                    mRecordingTimer.cancel();
-                    mRecordingTimer = null;
+                    releaseTimer();
                 }
                 updateTime();
             }
@@ -117,13 +118,22 @@ public class RecordingTestActivity extends BaseActivity {
         filePath = "";
     }
 
+    private void releaseTimer() {
+        if (mRecordingTimer != null) {
+            mRecordingTimer.purge();
+            mRecordingTimer.cancel();
+            mRecordingTimer = null;
+        }
+    }
+
     public void stopRecord() {
         try {
-            Toast.makeText(this, R.string.recording_complete, Toast.LENGTH_SHORT).show();
-            mMediaRecorder.stop();
-            mMediaRecorder.release();
-            mMediaRecorder = null;
-            filePath = "";
+            if (mMediaRecorder != null) {
+                mMediaRecorder.stop();
+                mMediaRecorder.release();
+                mMediaRecorder = null;
+                filePath = "";
+            }
         } catch (RuntimeException e) {
             mMediaRecorder.reset();
             mMediaRecorder.release();
@@ -131,4 +141,10 @@ public class RecordingTestActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        releaseTimer();
+        stopRecord();
+    }
 }

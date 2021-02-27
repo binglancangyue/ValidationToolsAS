@@ -31,4 +31,5 @@ android {
 dependencies {
     implementation files('libs/FpExtensionService.jar')
     implementation 'com.android.support:support-compat:28.0.0'
+    implementation 'org.jetbrains:annotations:15.0'
 }

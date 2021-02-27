@@ -108,4 +108,19 @@ public class HornTestActivity extends BaseActivity {
         return false;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (player != null) {
+            if (mPlayTimer != null) {
+                mPlayTimer.purge();
+                mPlayTimer.cancel();
+                mPlayTimer = null;
+            }
+            if (player.isPlaying()) {
+
+                player.stop();
+            }
+        }
+    }
 }

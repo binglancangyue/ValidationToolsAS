@@ -52,6 +52,7 @@ import com.sprd.validationtools.itemstest.BackgroundTestActivity;
 import com.sprd.validationtools.itemstest.WifiTestActivity;
 import com.sprd.validationtools.sqlite.EngSqlite;
 import com.sprd.validationtools.testinfo.TestInfoMainActivity;
+
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.app.AlertDialog;
@@ -69,12 +70,13 @@ public class ValidationToolsMainActivity extends Activity implements
     private ArrayList<TestItem> mAutoTestArray = null;
     private int mAutoTestCur = 0;
     private int mUserId;
+    private int type = 0;
 
     private ArrayList<BackgroundTest> mBgTest = null;
 
     private boolean mSavedSoundEffect = false;
     private boolean mSavedLockSound = false;
-    private  boolean mIsTested = false;
+    private boolean mIsTested = false;
     public final static String IS_SYSTEM_TESTED = "is_system_tested";
     private SharedPreferences mPrefs;
     private long time = 0;
@@ -84,6 +86,9 @@ public class ValidationToolsMainActivity extends Activity implements
     /*
      * Disable the Soundeffect for Phoneloopback,return the last status
      */
+    private AudioManager audioManager;
+    private Context mContext;
+
     private boolean setSoundEffect(boolean isOn) {
         AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
         if (isOn) {
@@ -114,7 +119,8 @@ public class ValidationToolsMainActivity extends Activity implements
         Log.d(TAG, "oncreate start!");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validation_tools_main);
-        mListItemString = new String[] {
+        mContext = this;
+        mListItemString = new String[]{
                 this.getString(R.string.item_test),
                 this.getString(R.string.full_test),
                 this.getString(R.string.test_info),
@@ -130,7 +136,11 @@ public class ValidationToolsMainActivity extends Activity implements
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         mIsTested = mPrefs.getBoolean(IS_SYSTEM_TESTED, false);
         mUserId = UserHandle.myUserId();
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        setVolume(AudioManager.STREAM_MUSIC);
         closeCamera();
+        Settings.Secure.putInt(getContentResolver(),
+                Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_HIGH_ACCURACY);
     }
 
     @Override
@@ -147,7 +157,7 @@ public class ValidationToolsMainActivity extends Activity implements
     @Override
     public void onPause() {
         Log.d(TAG, "onPause start!");
-        if(mUserId==0){
+        if (mUserId == 0) {
             saveTestInfo();
         }
         super.onPause();
@@ -160,11 +170,15 @@ public class ValidationToolsMainActivity extends Activity implements
             setLockSound(mSavedLockSound);
         }
         super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (resultCode == Const.TEST_ITEM_DONE) {
             autoTest();
+        }
+        if (requestCode == Const.TEST_ITEM_DONE_RE) {
+            autoTestForResult();
         }
     }
 
@@ -177,8 +191,8 @@ public class ValidationToolsMainActivity extends Activity implements
 //                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 //                            | View.SYSTEM_UI_FLAG_FULLSCREEN
 //                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        
-        
+
+
         int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
@@ -194,11 +208,17 @@ public class ValidationToolsMainActivity extends Activity implements
 
     private void autoTest() {
         hideNavigationBar();
+        if (type == 1) {
+            autoTestForResult();
+            return;
+        }
         if (mAutoTestArray != null && mAutoTestCur < mAutoTestArray.size()) {
+            Log.d(TAG, "autoTest: mAutoTestArray " + mAutoTestArray.get(mAutoTestCur).getAutoTestTestName()
+                    + " CLASS " + mAutoTestArray.get(mAutoTestCur).getAUTOTestClass());
             Intent intent = new Intent(ValidationToolsMainActivity.this,
-                    mAutoTestArray.get(mAutoTestCur).getTestClass());
+                    mAutoTestArray.get(mAutoTestCur).getAUTOTestClass());
             intent.putExtra(Const.INTENT_PARA_TEST_NAME,
-                    mAutoTestArray.get(mAutoTestCur).getTestname());
+                    mAutoTestArray.get(mAutoTestCur).getAutoTestTestName());
             intent.putExtra(Const.INTENT_PARA_TEST_INDEX, mAutoTestCur);
             startActivityForResult(intent, 0);
 
@@ -232,11 +252,56 @@ public class ValidationToolsMainActivity extends Activity implements
         }
     }
 
-    private void addFailedBgTestToTestlist() {
+    private void autoTestForResult() {
+        hideNavigationBar();
+        if (mAutoTestArray != null && mAutoTestCur < mAutoTestArray.size()) {
+            Log.d(TAG, "autoTestForResult: mAutoTestArray " + mAutoTestArray.get(mAutoTestCur).getTestname()
+                    + " CLASS " + mAutoTestArray.get(mAutoTestCur).getTestClass());
+            Intent intent = new Intent(ValidationToolsMainActivity.this,
+                    mAutoTestArray.get(mAutoTestCur).getTestClass());
+            intent.putExtra(Const.INTENT_PARA_TEST_NAME,
+                    mAutoTestArray.get(mAutoTestCur).getTestname());
+            intent.putExtra(Const.INTENT_PARA_TEST_INDEX, mAutoTestCur);
+            startActivityForResult(intent, 0);
 
+            mAutoTestCur++;
+        } else if (mBgTest != null && mAutoTestArray != null) {
+            EngSqlite engSqlite = EngSqlite.getInstance(this);
+            addFailedBgTestToTestlist();
+            String result = "";
+            result += getResources().getString(R.string.bg_test_notice)
+                    + "\n\n";
+
+            for (BackgroundTest bgTest : mBgTest) {
+                bgTest.stopTest();
+                engSqlite.updateDB(Const.ALL_TEST_ITEM_NAME[bgTest.getTestItemIdx()],
+                        bgTest.getResult() == BackgroundTest.RESULT_PASS ? Const.SUCCESS
+                                : Const.FAIL);
+                result += bgTest.getResultStr();
+                result += "\n\n";
+            }
+
+            Intent intent = new Intent(ValidationToolsMainActivity.this,
+                    BackgroundTestActivity.class);
+            intent.putExtra(Const.INTENT_BACKGROUND_TEST_RESULT, result);
+            startActivityForResult(intent, 0);
+            mBgTest = null;
+        } else {
+//            Intent intent = new Intent(ValidationToolsMainActivity.this,
+//                    TestResultActivity.class);
+//            intent.putExtra("start_time", time);
+//            startActivity(intent);
+        }
+    }
+
+    private void addFailedBgTestToTestlist() {
+        type = 1;
         for (BackgroundTest bgTest : mBgTest) {
             if (bgTest.getResult() != BackgroundTest.RESULT_PASS) {
-                TestItem item = new TestItem(bgTest.getTestItemIdx());
+                int index = bgTest.getTestItemIdx();
+                TestItem item = new TestItem(index);
+                Log.d(TAG, "addFailedBgTestToTestlist:index " + bgTest.getTestItemIdx());
+                Log.d(TAG, "addFailedBgTestToTestlist:item " + item.getTestname());
                 mAutoTestArray.add(item);
             }
         }
@@ -244,28 +309,35 @@ public class ValidationToolsMainActivity extends Activity implements
 
     private void startBackgroundTest() {
         mBgTest = new ArrayList<BackgroundTest>();
-        mBgTest.add(new BackgroundBtTest(this));
-        mBgTest.add(new BackgroundWifiTest(this));
+//        mBgTest.add(new BackgroundBtTest(this));
+//        mBgTest.add(new BackgroundWifiTest(this));
         mBgTest.add(new BackgroundGpsTest(this));
-        mBgTest.add(new BackgroundSimTest(this));
-        mBgTest.add(new BackgroundSdTest());
+//        mBgTest.add(new BackgroundSimTest(this));
+//        mBgTest.add(new BackgroundSdTest());
         for (BackgroundTest bgTest : mBgTest) {
             bgTest.startTest();
         }
     }
+
     public void saveTestInfo() {
-            SharedPreferences.Editor editor = mPrefs.edit();
-            editor.putBoolean(IS_SYSTEM_TESTED, mIsTested);
-            editor.apply();
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.putBoolean(IS_SYSTEM_TESTED, mIsTested);
+        editor.apply();
     }
 
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: ");
         mClickCount = 0;
     }
 
+    public void setVolume(int type) {
+        audioManager.setStreamVolume(type, audioManager.getStreamMaxVolume(type),
+                AudioManager.FLAG_PLAY_SOUND);
+    }
+
     private Integer mClickCount = 0;
+
     @Override
     public void onItemClick(AdapterView l, View v, int position, long id) {
         /* SPRD: bug453083 ,Multi user mode, set button is not click. {@ */
@@ -274,9 +346,9 @@ public class ValidationToolsMainActivity extends Activity implements
             return;
         }
         synchronized (mClickCount) {
-            Log.d(TAG, "mClickCount:"+mClickCount);
+            Log.d(TAG, "mClickCount:" + mClickCount);
             if (mClickCount > 0) {
-            return;
+                return;
             }
             mClickCount++;
         }
@@ -284,46 +356,47 @@ public class ValidationToolsMainActivity extends Activity implements
         mSavedLockSound = setLockSound(false);
         /* @} */
         switch (position) {
-        case FULL_TEST:
-            time = System.currentTimeMillis();
-            /*SPRD bug 753816 : Add all test item*/
-            if (mUserAllItemInFullTest) {
-                /*SPRD bug 760913:Remove some test in 10c10*/
-                if(Const.isBoardISharkL210c10()){
-                    Log.d("mAutoTestArray", "onItemClick:getSupportList10C10 ");
-                    mAutoTestArray = Const.getSupportList10C10(false,this);
-                }else{
-                    Log.d("mAutoTestArray", "onItemClick:getSupportList ");
+            case FULL_TEST:
+                time = System.currentTimeMillis();
+                /*SPRD bug 753816 : Add all test item*/
+                if (mUserAllItemInFullTest) {
+                    /*SPRD bug 760913:Remove some test in 10c10*/
+                    if (Const.isBoardISharkL210c10()) {
+                        Log.d("mAutoTestArray", "onItemClick:getSupportList10C10 ");
+                        mAutoTestArray = Const.getSupportList10C10(false, this);
+                    } else {
+                        Log.d("mAutoTestArray", "onItemClick:getSupportList ");
 
-                    mAutoTestArray = Const.getSupportList(false, this);
+                        mAutoTestArray = Const.getSupportList(false, this);
+                    }
+                    /*@}*/
+                } else {
+                    Log.d("mAutoTestArray", "onItemClick:getSupportAutoTestList ");
+                    mAutoTestArray = Const.getSupportAutoTestList(this);
                 }
                 /*@}*/
-            } else {
-                Log.d("mAutoTestArray", "onItemClick:getSupportAutoTestList ");
-                mAutoTestArray = Const.getSupportAutoTestList(this);
-            }
-            /*@}*/
-            mAutoTestCur = 0;
-            mIsTested = true;
-            if(Const.isBoardISharkL210c10()){
-                //
-            }else{
-                startBackgroundTest();
-            }
+                mAutoTestCur = 0;
+                mIsTested = true;
+                if (Const.isBoardISharkL210c10()) {
+                    //
+                } else {
+                    startBackgroundTest();
+                }
 //            hideNavigationBar();
-            autoTest();
+                type = 0;
+                autoTest();
                 break;
             case UNIT_TEST: {
                 Intent intent = new Intent(this, ListItemTestActivity.class);
                 startActivity(intent);
             }
-                break;
+            break;
             case TEST_INFO: {
                 Intent intent = new Intent(this, TestInfoMainActivity.class);
                 intent.putExtra(IS_SYSTEM_TESTED, mIsTested);
                 startActivity(intent);
             }
-                break;
+            break;
             case RESET: {
                 mClickCount = 0;
                 AlertDialog dialog = new AlertDialog.Builder(this)
@@ -377,6 +450,8 @@ interface BackgroundTest {
     public String getResultStr();
 
     public int getTestItemIdx();
+
+    int getAutoTestItemIdx();
 }
 
 class BackgroundBtTest implements BackgroundTest {
@@ -443,6 +518,16 @@ class BackgroundBtTest implements BackgroundTest {
         }
         return -1;
     }
+
+    @Override
+    public int getAutoTestItemIdx() {
+        for (int i = 0; i < Const.AUTO_TEST_ITEM.length; i++) {
+            if (Const.AUTO_TEST_ITEM[i] == BluetoothTestActivity.class) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
 
 class BackgroundGpsTest implements BackgroundTest {
@@ -474,7 +559,7 @@ class BackgroundGpsTest implements BackgroundTest {
             }
 
             public void onStatusChanged(String provider, int status,
-                    Bundle extras) {
+                                        Bundle extras) {
             }
         };
 
@@ -492,12 +577,15 @@ class BackgroundGpsTest implements BackgroundTest {
                         count++;
                         GpsSatellite gpsSatellite = iterator.next();
                         float snr = gpsSatellite.getSnr();
-                        Log.d(TAG, "snr = "+snr);
-                        if (snr > 35.0)
+                        Log.d(TAG, "snr = " + snr);
+                        if (snr >= 5.0) {
                             flag = true;
+                        }
                     }
-                    if (count >= SATELLITE_COUNT_MIN && flag){
+                    if (count >= SATELLITE_COUNT_MIN && flag) {
                         testResult = RESULT_PASS;
+                    } else {
+                        testResult = RESULT_FAIL;
                     }
                 }
             }
@@ -547,6 +635,16 @@ class BackgroundGpsTest implements BackgroundTest {
     public int getTestItemIdx() {
         for (int i = 0; i < Const.ALL_TEST_ITEM.length; i++) {
             if (Const.ALL_TEST_ITEM[i] == GpsTestActivity.class) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public int getAutoTestItemIdx() {
+        for (int i = 0; i < Const.AUTO_TEST_ITEM.length; i++) {
+            if (Const.AUTO_TEST_ITEM[i] == GpsTestActivity.class) {
                 return i;
             }
         }
@@ -609,6 +707,16 @@ class BackgroundWifiTest implements BackgroundTest {
         }
         return -1;
     }
+
+    @Override
+    public int getAutoTestItemIdx() {
+        for (int i = 0; i < Const.AUTO_TEST_ITEM.length; i++) {
+            if (Const.AUTO_TEST_ITEM[i] == WifiTestActivity.class) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
 
 class BackgroundSimTest implements BackgroundTest {
@@ -629,13 +737,13 @@ class BackgroundSimTest implements BackgroundTest {
 
                 //modify 336688 by sprd
                 //Single card and Multi card get TelephonyManager method is different
-                if(phoneCount == 1){
+                if (phoneCount == 1) {
                     telMgr = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
                     if (telMgr.getSimState() == TelephonyManager.SIM_STATE_READY) {
                         readyCount++;
                     }
-               /* SPRD:394857 system test wrong in sim background test @{*/
-                }else{
+                    /* SPRD:394857 system test wrong in sim background test @{*/
+                } else {
                     telMgr = (TelephonyManager) mContext
                             .getSystemService(Context.TELEPHONY_SERVICE);
                     for (int i = 0; i < phoneCount; i++) {
@@ -678,6 +786,16 @@ class BackgroundSimTest implements BackgroundTest {
     public int getTestItemIdx() {
         for (int i = 0; i < Const.ALL_TEST_ITEM.length; i++) {
             if (Const.ALL_TEST_ITEM[i] == SIMCardTestActivity.class) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public int getAutoTestItemIdx() {
+        for (int i = 0; i < Const.AUTO_TEST_ITEM.length; i++) {
+            if (Const.AUTO_TEST_ITEM[i] == SIMCardTestActivity.class) {
                 return i;
             }
         }
@@ -820,6 +938,16 @@ class BackgroundSdTest implements BackgroundTest {
     public int getTestItemIdx() {
         for (int i = 0; i < Const.ALL_TEST_ITEM.length; i++) {
             if (Const.ALL_TEST_ITEM[i] == SDCardTest.class) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public int getAutoTestItemIdx() {
+        for (int i = 0; i < Const.AUTO_TEST_ITEM.length; i++) {
+            if (Const.AUTO_TEST_ITEM[i] == SDCardTest.class) {
                 return i;
             }
         }

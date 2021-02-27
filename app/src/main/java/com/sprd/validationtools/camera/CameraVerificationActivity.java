@@ -84,7 +84,7 @@ public class CameraVerificationActivity extends BaseActivity implements
     private TextureView mPreviewView;
     private CameraDevice mCameraDevice;
     private List<Surface> outputSurfaces = new ArrayList<Surface>(2);
-    private String mCameraID = "12";
+    private String mCameraID = "1";
 
     private CameraCaptureSession mSession;
     private Size mPreviewSize;
@@ -176,7 +176,7 @@ public class CameraVerificationActivity extends BaseActivity implements
         //removeButton();
         startBackgroundThread();
         if(mPassButton != null){
-           mPassButton.setVisibility(View.GONE);
+           mPassButton.setVisibility(View.VISIBLE);
         }
         if(mCameraSound == null){
             mCameraSound = new MediaActionSound();
@@ -543,7 +543,7 @@ public class CameraVerificationActivity extends BaseActivity implements
     private void startPreview(CameraDevice camera) {
         Log.i(TAG, "start preview ");
         SurfaceTexture texture = mPreviewView.getSurfaceTexture();
-        texture.setDefaultBufferSize(960, 720);
+        texture.setDefaultBufferSize(1920, 1080);
         Surface surface = new Surface(texture);
         try {
 

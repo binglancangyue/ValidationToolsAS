@@ -6,12 +6,14 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.StatFs;
 import android.os.storage.StorageManager;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.widget.TextView;
 import android.os.SystemProperties;
+import android.widget.Toast;
 
 import com.android.internal.util.MemInfoReader;
 
@@ -28,6 +30,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 public class StorageTestActivity extends BaseActivity {
@@ -44,19 +48,44 @@ public class StorageTestActivity extends BaseActivity {
             128 * MB_IN_BYTES, 256 * MB_IN_BYTES,
             512 * MB_IN_BYTES
     };
+    private Timer mTimer;
+    private String ddr;
+    private String emc;
+    private int time = 0;
+    private Handler mHandler;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_storage_test);
-        initView();
+        mContext = this;
+        mHandler = new Handler();
+        getWindow().getDecorView().post(new Runnable() {
+            @Override
+            public void run() {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        initView();
+                        initData();
+                        startPlayVoice();
+                    }
+                });
+            }
+        });
     }
 
     private void initView() {
         tvEMC = findViewById(R.id.tv_title_emc);
         tvDDR = findViewById(R.id.tv_title_ddr);
-        tvDDR.setText(getDDR());
-        tvEMC.setText(getTotalSize());
+    }
+
+    private void initData() {
+        ddr = getDDR();
+        emc = getTotalSize();
+        tvDDR.setText(ddr);
+        tvEMC.setText(emc);
     }
 
     private String getDDR() {
@@ -214,4 +243,51 @@ public class StorageTestActivity extends BaseActivity {
         return String.format(Locale.getDefault(), " %.2f %s ", size, units[index]);
     }
 
+    private void startPlayVoice() {
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                time++;
+                if (time == 6) {
+                    time = 0;
+                    stopTimer();
+                    setResult();
+                }
+            }
+        }, 100, 1000);
+    }
+
+
+    private void stopTimer() {
+        if (mTimer != null) {
+            mTimer.purge();
+            mTimer.cancel();
+            mTimer = null;
+        }
+    }
+
+    private void setResult() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!ddr.equals("") && !emc.equals("")) {
+                    Toast.makeText(StorageTestActivity.this, R.string.text_pass,
+                            Toast.LENGTH_SHORT).show();
+                    storeRusult(true);
+                } else {
+                    Toast.makeText(StorageTestActivity.this, R.string.text_fail,
+                            Toast.LENGTH_SHORT).show();
+                    storeRusult(false);
+                }
+            }
+        });
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopTimer();
+        super.onDestroy();
+    }
 }

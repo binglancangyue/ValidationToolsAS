@@ -29,7 +29,7 @@
     <string name="sdcard2_test">外卡测试</string>
     <string name="no_sdcard2">外卡不存在</string>
     <string name="sdcard2_test_result_success">外卡读写成功</string>
-    <string name="sdcard2_test_result_fail">外卡读写成功</string>
+    <string name="sdcard2_test_result_fail">外卡读写失败</string>
     <string name="not_surport">不支持</string>
     <string name="hello">Hello World, VolidationTools8810Activity!</string>
     <string name="fm_dialog_know">知道了</string>
@@ -171,7 +171,7 @@
     <string name="sdcard_test_write">写入文件...</string>
     <string name="sdcard_test_read">读取文件...</string>
     <string name="sdcard_test_result_success">内卡读写成功</string>
-    <string name="sdcard_test_result_fail">内卡读写成功</string>
+    <string name="sdcard_test_result_fail">内卡读写失败</string>
     <string name="status">状态:</string>
     <string name="plugged">插入:</string>
     <string name="battery_title_text">充电测试</string>

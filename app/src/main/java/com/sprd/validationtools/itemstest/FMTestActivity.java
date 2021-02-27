@@ -57,7 +57,7 @@ public class FMTestActivity extends BaseActivity {
                 player.setDataSource(VOICE_PATH);
             } else {
                 Log.d(TAG, "playVoice:create ");
-                player = MediaPlayer.create(this, R.raw.soundtriggermp);
+                player = MediaPlayer.create(this, R.raw.mixtone);
             }
             player.prepare();
             player.start();
@@ -188,6 +188,11 @@ public class FMTestActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (player != null) {
+            if (player.isPlaying()) {
+                player.stop();
+            }
+        }
         openOrCloseFM(false);
     }
 

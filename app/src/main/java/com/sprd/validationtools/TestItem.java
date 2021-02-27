@@ -13,12 +13,20 @@ public class TestItem {
         return Const.ALL_TEST_ITEM[indexInAll];
     }
 
+    public Class getAUTOTestClass() {
+        return Const.AUTO_TEST_ITEM[indexInAll];
+    }
+
     public int getTestTitle() {
         return Const.ALL_TEST_ITEM_STRID[indexInAll];
     }
 
     public String getTestname() {
         return Const.ALL_TEST_ITEM_NAME[indexInAll];
+    }
+
+    public String getAutoTestTestName() {
+        return Const.AUTO_TEST_ITEM_NAME[indexInAll];
     }
 
     public void setResult(int result) {
