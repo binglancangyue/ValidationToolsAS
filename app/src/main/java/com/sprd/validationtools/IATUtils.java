@@ -29,7 +29,7 @@ public class IATUtils {
 
     public static String sendAtCmd(String cmd){
         //if (mTelephonyManager.invokeOemRilRequestStrings(0,command,result) >= 0) {
-        String result = Native.native_sendATCmd(0, cmd);
+        String result = "Native.native_sendATCmd(0, cmd)";
         if(!result.contains("OK")){
            result = IATUtils.AT_FAIL;
         }

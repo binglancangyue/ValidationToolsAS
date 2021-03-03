@@ -145,6 +145,7 @@ public class SingleTouchPointTest extends BaseActivity {
     private float getRadiusPx() {
         float radius = -1;
         radius = RADIUS * mDisplayMetrics.density;
+        Log.d(TAG, "getRadiusPx: "+mDisplayMetrics.density);
         //if (Debug.isDebug()) {
         //    Log.v("VTools", "density = " + mDisplayMetrics.density);
         //}
@@ -335,6 +336,7 @@ public class SingleTouchPointTest extends BaseActivity {
         Paint paint = new Paint();
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.RED);
+        paint.setTextSize(22);
         if (isShowCoordinate()) {
             int x = 0;
             int y = 0;
@@ -342,7 +344,7 @@ public class SingleTouchPointTest extends BaseActivity {
                 x = (int) touchX;
                 y = (int) touchY;
             }
-            canvas.drawText("(" + x + "," + y + ")", (mScreenWidth / 2), FIXED_TEXT, paint);
+            canvas.drawText("(" + x + "," + y + ")", (mScreenWidth / 2), FIXED_TEXT + 10, paint);
         }
     }
 
@@ -422,8 +424,10 @@ public class SingleTouchPointTest extends BaseActivity {
      */
     private boolean isInCircle(double x0, double y0, double x1, double y1, double radius) {
         double distance = 0;
+        radius += 60;
         distance = Math.sqrt(Math.abs(x0 - x1) * Math.abs(x0 - x1) + Math.abs(y0 - y1)
                 * Math.abs(y0 - y1));
+        Log.d(TAG, "isInCircle:distance "+distance+" radius "+radius);
         if (distance <= radius) {
             return true;
         }

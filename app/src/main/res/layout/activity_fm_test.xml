@@ -3,15 +3,17 @@
     style="@style/LayoutStyle">
 
     <TextView
+        android:id="@+id/tv_test_title"
         style="@style/LayoutTitleStyle"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="@string/fm_emission_test" />
 
     <LinearLayout
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_below="@id/tv_test_title"
         android:gravity="center"
         android:orientation="vertical">
 

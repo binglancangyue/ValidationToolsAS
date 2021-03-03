@@ -1,54 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutStyle"
+    android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/buttonslinear"
-        android:gravity="center"
-        android:orientation="vertical" >
+    <TextView
+        style="@style/LayoutTitleStyle"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/phone_loopback_test" />
 
-        <TextView
-            android:id="@+id/micphone_msg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/buttonslinear"
-            android:text="@string/phone_loopback_test_notice"
-            android:textSize="30dip" />
-    </ScrollView>
+    <TextView
+        android:id="@+id/micphone_msg"
+        style="@style/itemTextTitleStyle"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/phone_loopback_test_notice" />
 
     <LinearLayout
         android:id="@+id/buttonslinear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="@dimen/lookback_bottom_size"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="vertical">
 
             <RadioButton
                 android:id="@+id/radio_speaker"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:enabled="false"
                 android:text="@+string/phoneloopback_speaker"
-                android:enabled = "false" />
+                android:textColor="@android:color/white"
+                android:textSize="24sp" />
 
             <RadioButton
+                android:layout_marginTop="10dp"
                 android:id="@+id/radio_earpiece"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:enabled="false"
                 android:text="@+string/phoneloopback_earpiece"
-                android:enabled = "false" />
+                android:textColor="@android:color/white"
+                android:textSize="24sp" />
         </RadioGroup>
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

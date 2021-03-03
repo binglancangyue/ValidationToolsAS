@@ -74,7 +74,7 @@ public class WifiTestUtil {
     public void stopTest() {
         // mWifiManager.cancelDiscovery();
         unregisterAllReceiver();
-        mWifiManager.setWifiEnabled(false);
+//        mWifiManager.setWifiEnabled(false);
     }
 
     private void wifiStartDiscovery() {

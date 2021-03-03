@@ -138,6 +138,7 @@ public class ValidationToolsMainActivity extends Activity implements
         mUserId = UserHandle.myUserId();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         setVolume(AudioManager.STREAM_MUSIC);
+        setVolume(AudioManager.STREAM_RING);
         closeCamera();
         Settings.Secure.putInt(getContentResolver(),
                 Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_HIGH_ACCURACY);

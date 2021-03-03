@@ -19,6 +19,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
@@ -132,9 +133,23 @@ public class GpsTestActivity extends BaseActivity {
      * the f result of the gps test
      */
     private static final byte RESULT_FAILURE = 0;
-
+    private TextView txtCount;
+    private TextView txtTime;
     private TextView mSatelliteInfo;
-    public Handler mHandler = new Handler();
+    private String info = "";
+    public Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 3) {
+                mSatelliteInfo.setText(info);
+            }
+            if (msg.what == 4) {
+                finish();
+            }
+            removeMessages(msg.what);
+        }
+    };
 
     private Runnable mR = new Runnable() {
         public void run() {
@@ -165,10 +180,11 @@ public class GpsTestActivity extends BaseActivity {
         setContentView(R.layout.gps_test_main);
         setTitle(R.string.gps_test);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-
-        txtGpsMsg = (TextView) findViewById(R.id.txt_gps_not_enabled);
-        mSatelliteInfo = (TextView) findViewById(R.id.txt_gps_satellite_info);
-        mSatelliteInfo.setText("\n\n");
+        txtCount = findViewById(R.id.txt_gps_satellite_count);
+        txtTime = findViewById(R.id.txt_gps_time_count);
+        txtGpsMsg = findViewById(R.id.txt_gps_not_enabled);
+        mSatelliteInfo = findViewById(R.id.txt_gps_satellite_info);
+//        mSatelliteInfo.setText("\n\n");
         mHandler.postDelayed(mR, 60000);
     }
 
@@ -221,7 +237,7 @@ public class GpsTestActivity extends BaseActivity {
                 Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_HIGH_ACCURACY);
         try {
             manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    UPDATE_MIN_TIME, 0, locationListener);
+                    UPDATE_MIN_TIME, 500, locationListener);
             manager.addGpsStatusListener(gpsStatusListener);
         } catch (Exception e) {
             e.printStackTrace();
@@ -284,9 +300,10 @@ public class GpsTestActivity extends BaseActivity {
             Iterator<GpsSatellite> iterator = status.getSatellites().iterator();
 
             // get satellite count
-            mSatelliteInfo.setText("\n\n");
+//            mSatelliteInfo.setText("\n\n");
+            StringBuilder stringBuilder = new StringBuilder();
+            Log.d(TAG, "showSatelliteCount: " + count);
             while (iterator.hasNext()) {
-                Log.d(TAG, "has next");
                 count++;
                 GpsSatellite gpsSatellite = iterator.next();
                 float snr = gpsSatellite.getSnr();
@@ -294,19 +311,25 @@ public class GpsTestActivity extends BaseActivity {
                 if (snr >= 5.0) {
                     flag = true;
                 }
-                mSatelliteInfo.append("id: ");
+                /*mSatelliteInfo.append("id: ");
                 mSatelliteInfo.append(String.valueOf(gpsSatellite.getPrn()));
                 mSatelliteInfo.append("\nsnr: ");
                 mSatelliteInfo.append(String.valueOf(snr));
-                mSatelliteInfo.append("\n\n");
+                mSatelliteInfo.append("\n\n");*/
+                stringBuilder.append("Satellite ID: ");
+                stringBuilder.append(gpsSatellite.getPrn());
+                stringBuilder.append(" ; SNR: ");
+                stringBuilder.append(String.valueOf(snr));
+                stringBuilder.append("\n");
             }
-
+            info = stringBuilder.toString();
+            mHandler.sendEmptyMessage(3);
             // satellite count is ok
             if (count >= SATELLITE_COUNT_MIN && flag) {
                 Toast.makeText(GpsTestActivity.this, R.string.text_pass,
                         Toast.LENGTH_SHORT).show();
                 storeRusult(true);
-                finish();
+                mHandler.sendEmptyMessageDelayed(4, 2000);
             }
 
             // save max satellite count that have been searched
@@ -316,7 +339,6 @@ public class GpsTestActivity extends BaseActivity {
         }
 
         // show count
-        TextView txtCount = (TextView) findViewById(R.id.txt_gps_satellite_count);
         txtCount.setText(" " + mSatelliteCount);
 
 /*        if (flag) {
@@ -338,7 +360,6 @@ public class GpsTestActivity extends BaseActivity {
             runOnUiThread(new Runnable() {
                 public void run() {
                     // show time count
-                    TextView txtTime = (TextView) findViewById(R.id.txt_gps_time_count);
                     txtTime.setText(timeCount + " ");
                 }
             });

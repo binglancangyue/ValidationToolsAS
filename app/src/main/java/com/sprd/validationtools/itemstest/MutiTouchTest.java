@@ -10,6 +10,7 @@ import android.graphics.PointF;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,6 +43,8 @@ public class MutiTouchTest extends BaseActivity{
         setContentView(createView());
         super.onCreate(savedInstanceState);
         super.removeButton();
+        Settings.System.putInt(getContentResolver(),
+                Settings.System.POINTER_LOCATION, 1);
     }
 
     private View createView(){
@@ -60,6 +63,7 @@ public class MutiTouchTest extends BaseActivity{
         mImgView = new MuiltImageView(this, mDisplayMetrics.widthPixels,
                 mDisplayMetrics.heightPixels, mHandler);
         mTextView.setLayoutParams(vlp);
+        mTextView.setPadding(10,20,0,0);
         mImgView.setLayoutParams(vlp);
         mTextView.setText(getString(R.string.muti_touchpoint_info));
         mTextView.setTextSize(26);
@@ -128,5 +132,12 @@ public class MutiTouchTest extends BaseActivity{
             invalidate();
             return true;
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Settings.System.putInt(getContentResolver(),
+                Settings.System.POINTER_LOCATION, 0);
     }
 }

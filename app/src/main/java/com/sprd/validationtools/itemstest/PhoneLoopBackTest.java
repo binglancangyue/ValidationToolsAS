@@ -55,6 +55,7 @@ public class PhoneLoopBackTest extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.removeButton();
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);

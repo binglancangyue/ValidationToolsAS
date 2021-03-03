@@ -4,9 +4,10 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_centerHorizontal="true"
+        android:id="@+id/tv_test_title"
         style="@style/LayoutTitleStyle"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="@string/product_information" />
 
@@ -17,8 +18,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
+        android:layout_below="@id/tv_test_title"
         android:orientation="vertical">
 
         <TextView

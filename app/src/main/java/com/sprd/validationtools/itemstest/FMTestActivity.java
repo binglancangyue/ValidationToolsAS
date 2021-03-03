@@ -51,7 +51,12 @@ public class FMTestActivity extends BaseActivity {
 
     private void playVoice() {
         try {
-            player = new MediaPlayer();
+            if (player == null) {
+                player = new MediaPlayer();
+            }
+            if (player.isPlaying()) {
+                player.stop();
+            }
             if (checkFile()) {
                 Log.d(TAG, "playVoice: ");
                 player.setDataSource(VOICE_PATH);
@@ -191,6 +196,8 @@ public class FMTestActivity extends BaseActivity {
         if (player != null) {
             if (player.isPlaying()) {
                 player.stop();
+                player.release();
+                player = null;
             }
         }
         openOrCloseFM(false);
