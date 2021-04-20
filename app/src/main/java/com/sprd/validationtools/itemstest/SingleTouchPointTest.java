@@ -424,7 +424,7 @@ public class SingleTouchPointTest extends BaseActivity {
      */
     private boolean isInCircle(double x0, double y0, double x1, double y1, double radius) {
         double distance = 0;
-        radius += 60;
+        radius += 75;
         distance = Math.sqrt(Math.abs(x0 - x1) * Math.abs(x0 - x1) + Math.abs(y0 - y1)
                 * Math.abs(y0 - y1));
         Log.d(TAG, "isInCircle:distance "+distance+" radius "+radius);
@@ -442,9 +442,10 @@ public class SingleTouchPointTest extends BaseActivity {
      * @param canvas canvas
      * @param radius radius
      */
-    private boolean drawShapes(float x1, float y1, float x2, float y2, Canvas canvas, float radius,
+    private boolean drawShapes(float x1, float y1, float ,x2 float y2, Canvas canvas, float radius,
             int iTag) {
-        if (x1 == 0 || y2 == 0 || x2 == 0 || y1 == 0) {
+        if (x1 == 0 || y2 == 0 || x2 == 0 ||
+                y1 == 0) {
             return false;
         }
         Paint paint = new Paint();

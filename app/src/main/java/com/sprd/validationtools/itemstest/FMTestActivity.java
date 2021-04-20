@@ -57,14 +57,14 @@ public class FMTestActivity extends BaseActivity {
             if (player.isPlaying()) {
                 player.stop();
             }
-            if (checkFile()) {
-                Log.d(TAG, "playVoice: ");
-                player.setDataSource(VOICE_PATH);
-            } else {
+//            if (checkFile()) {
+//                Log.d(TAG, "playVoice: ");
+//                player.setDataSource(VOICE_PATH);
+//            } else {
                 Log.d(TAG, "playVoice:create ");
                 player = MediaPlayer.create(this, R.raw.mixtone);
-            }
-            player.prepare();
+//            }
+//            player.prepare();
             player.start();
         } catch (Exception e) {
             e.printStackTrace();

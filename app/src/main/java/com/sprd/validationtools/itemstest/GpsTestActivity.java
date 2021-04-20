@@ -184,8 +184,11 @@ public class GpsTestActivity extends BaseActivity {
         txtTime = findViewById(R.id.txt_gps_time_count);
         txtGpsMsg = findViewById(R.id.txt_gps_not_enabled);
         mSatelliteInfo = findViewById(R.id.txt_gps_satellite_info);
+        Intent launchIntent = getPackageManager().
+                getLaunchIntentForPackage("com.chartcross.gpstestplus");
+        startActivity(launchIntent);
 //        mSatelliteInfo.setText("\n\n");
-        mHandler.postDelayed(mR, 60000);
+//        mHandler.postDelayed(mR, 60000);
     }
 
     @Override
