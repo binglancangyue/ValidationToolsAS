@@ -139,6 +139,8 @@ public class ValidationToolsMainActivity extends Activity implements
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         setVolume(AudioManager.STREAM_MUSIC);
         setVolume(AudioManager.STREAM_RING);
+        Intent intent = new Intent("com.android.systemui.OPEN_CAMERA");
+        sendBroadcast(intent);
         closeCamera();
         Settings.Secure.putInt(getContentResolver(),
                 Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_HIGH_ACCURACY);

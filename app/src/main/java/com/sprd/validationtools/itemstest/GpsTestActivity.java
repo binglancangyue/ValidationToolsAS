@@ -311,7 +311,7 @@ public class GpsTestActivity extends BaseActivity {
                 GpsSatellite gpsSatellite = iterator.next();
                 float snr = gpsSatellite.getSnr();
                 Log.d(TAG, "snr = " + snr);
-                if (snr >= 5.0) {
+                if (snr >= 35.0) {
                     flag = true;
                 }
                 /*mSatelliteInfo.append("id: ");

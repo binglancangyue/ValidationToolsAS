@@ -442,10 +442,9 @@ public class SingleTouchPointTest extends BaseActivity {
      * @param canvas canvas
      * @param radius radius
      */
-    private boolean drawShapes(float x1, float y1, float ,x2 float y2, Canvas canvas, float radius,
+    private boolean drawShapes(float x1, float y1, float x2, float y2, Canvas canvas, float radius,
             int iTag) {
-        if (x1 == 0 || y2 == 0 || x2 == 0 ||
-                y1 == 0) {
+        if (x1 == 0 || y2 == 0 || x2 == 0 || y1 == 0) {
             return false;
         }
         Paint paint = new Paint();
