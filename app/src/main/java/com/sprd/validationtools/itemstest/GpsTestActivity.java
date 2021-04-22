@@ -237,7 +237,7 @@ public class GpsTestActivity extends BaseActivity {
 //        Settings.Secure.setLocationProviderEnabled(getContentResolver(),
 //                LocationManager.GPS_PROVIDER, true);
         Settings.Secure.putInt(getContentResolver(),
-                Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_HIGH_ACCURACY);
+                Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_SENSORS_ONLY);
         try {
             manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     UPDATE_MIN_TIME, 500, locationListener);

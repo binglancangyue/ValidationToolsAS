@@ -143,7 +143,7 @@ public class ValidationToolsMainActivity extends Activity implements
         sendBroadcast(intent);
         closeCamera();
         Settings.Secure.putInt(getContentResolver(),
-                Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_HIGH_ACCURACY);
+                Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_SENSORS_ONLY);
     }
 
     @Override
@@ -172,6 +172,8 @@ public class ValidationToolsMainActivity extends Activity implements
             setSoundEffect(mSavedSoundEffect);
             setLockSound(mSavedLockSound);
         }
+        Settings.Secure.putInt(getContentResolver(),
+                Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_HIGH_ACCURACY);
         super.onDestroy();
         Log.d(TAG, "onDestroy: ");
     }

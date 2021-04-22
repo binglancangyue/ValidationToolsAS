@@ -108,7 +108,7 @@ public class Const {
 public static final int[] ALL_TEST_ITEM_STRID = {
         R.string.version_test, R.string.display_test_title,
         /* R.string.touchpoint_test, */R.string.muti_touchpoint_test,
-        /*R.string.recording_test_title,*/ R.string.tv_horn_test_title,
+        R.string.recording_test_title, R.string.tv_horn_test_title,
         R.string.gravity_sensor_test, R.string.front_camera_title_text,
         R.string.back_camera_title_text, R.string.fm_test,
         R.string.bt_test, R.string.wifi_test,
@@ -142,7 +142,7 @@ public static final int[] ALL_TEST_ITEM_STRID = {
 public static final String[] ALL_TEST_ITEM_NAME = {
         "Version", "Screen test",
         /*"TP test",*/ "Multi-TP test",
-        /*"Recording test",*/ "Horn test",
+        "Recording test", "Horn test",
         "Gsensor test", "FrontCamera test",
         "BackCamera test", "FM test",
         "Bluetooth test", "Wifi test",
@@ -155,7 +155,7 @@ public static final String[] ALL_TEST_ITEM_NAME = {
     public static final String[] AUTO_TEST_ITEM_NAME = {
             "Version", "Screen test",
             /*"TP test",*/ "Multi-TP test",
-            /*"Recording test",*/ "Horn test",
+            "Recording test", "Horn test",
             "Gsensor test", "FrontCamera test",
             "BackCamera test", "FM test",
             "Bluetooth test", "Wifi test",
@@ -196,7 +196,7 @@ public static final String[] ALL_TEST_ITEM_NAME = {
 public static final Class[] ALL_TEST_ITEM = {
         SystemVersionTest.class, ScreenColorTest.class,
         /*SingleTouchPointTest.class,*/ /*ScreenTouchTestActivity.class,*/SingleTouchPointTest.class,
-        /*RecordingTestActivity.class,*/ /*HornTestActivity.class,*/PhoneLoopBackTest.class,
+        RecordingTestActivity.class, HornTestActivity.class,/*PhoneLoopBackTest.class,*/
         GsensorTestActivity.class, FrontCameraTestActivity.class,
         CameraTestActivity.class, FMTestActivity.class,
         BluetoothTestActivity.class, WifiTestActivity.class,
@@ -209,7 +209,7 @@ public static final Class[] ALL_TEST_ITEM = {
     public static final Class[] AUTO_TEST_ITEM = {
             SystemVersionTest.class, ScreenColorTest.class,
             /*SingleTouchPointTest.class,*/ /*ScreenTouchTestActivity.class,*/SingleTouchPointTest.class,
-            /*RecordingTestActivity.class,*/ /*HornTestActivity.class,*/PhoneLoopBackTest.class,
+            RecordingTestActivity.class, HornTestActivity.class,/*PhoneLoopBackTest.class,*/
             GsensorTestActivity.class, FrontCameraTestActivity.class,
             CameraTestActivity.class, FMTestActivity.class,
             BluetoothTestActivity.class, WifiTestActivity.class,
@@ -249,7 +249,7 @@ public static final Class[] ALL_TEST_ITEM = {
 public static final Class[] DEFAULT_UNIT_TEST_ITEMS = {
         SystemVersionTest.class, ScreenColorTest.class,
         /*SingleTouchPointTest.class,*/ /*ScreenTouchTestActivity.class,*/SingleTouchPointTest.class,
-        /*RecordingTestActivity.class,*/ /*HornTestActivity.class,*/PhoneLoopBackTest.class,
+        RecordingTestActivity.class, HornTestActivity.class,/*PhoneLoopBackTest.class,*/
         GsensorTestActivity.class, FrontCameraTestActivity.class,
         CameraTestActivity.class, FMTestActivity.class,
         BluetoothTestActivity.class, WifiTestActivity.class,
@@ -290,7 +290,7 @@ public static final Class[] DEFAULT_UNIT_TEST_ITEMS = {
     public static final Class[] DEFAULT_AUTO_TEST_ITEMS = {
             SystemVersionTest.class, ScreenColorTest.class,
             /*SingleTouchPointTest.class,*/ /*ScreenTouchTestActivity.class,*/SingleTouchPointTest.class,
-            /*RecordingTestActivity.class,*/ /*HornTestActivity.class,*/PhoneLoopBackTest.class,
+            RecordingTestActivity.class, HornTestActivity.class,/*PhoneLoopBackTest.class,*/
             GsensorTestActivity.class, FrontCameraTestActivity.class,
             CameraTestActivity.class, FMTestActivity.class,
             BluetoothTestActivity.class, WifiTestActivity.class,

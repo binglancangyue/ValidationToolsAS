@@ -8,14 +8,18 @@ import com.sprd.validationtools.BaseActivity;
 import com.sprd.validationtools.Const;
 import com.sprd.validationtools.R;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -62,6 +66,10 @@ public class GsensorTestActivity extends BaseActivity {
     TextView tvGSensorY;
     TextView tvGSensorZ;
 
+    float x;
+    float z;
+    float y;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +87,7 @@ public class GsensorTestActivity extends BaseActivity {
         }
         /*@}*/
         initSensor();
+        test();
     }
 
     private void initView() {
@@ -138,9 +147,9 @@ public class GsensorTestActivity extends BaseActivity {
 
             public void onSensorChanged(SensorEvent event) {
                 mValues = event.values;
-                float x = event.values[SensorManager.DATA_X];
-                float y = event.values[SensorManager.DATA_Y];
-                float z = event.values[SensorManager.DATA_Z];
+                x = event.values[SensorManager.DATA_X];
+                y = event.values[SensorManager.DATA_Y];
+                z = event.values[SensorManager.DATA_Z];
                 showMsg(x, y, z);
                 double dx = Math.abs(9.8 - Math.abs(x));
                 double dy = Math.abs(9.8 - Math.abs(y));
@@ -233,6 +242,23 @@ public class GsensorTestActivity extends BaseActivity {
             tvGSensorY.setText("0");
             tvGSensorZ.setText("0");
         }
+    }
+
+    private void test() {
+        mHandler.postDelayed(new Runnable() {
+            public void run() {
+                if (x != 0 && y != 0 && y != 0) {
+                    Toast.makeText(GsensorTestActivity.this, R.string.text_pass,
+                            Toast.LENGTH_SHORT).show();
+                    storeRusult(true);
+                } else {
+                    Toast.makeText(GsensorTestActivity.this, R.string.text_fail,
+                            Toast.LENGTH_SHORT).show();
+                    storeRusult(false);
+                }
+                finish();
+            }
+        }, 5000);
     }
 
 }
